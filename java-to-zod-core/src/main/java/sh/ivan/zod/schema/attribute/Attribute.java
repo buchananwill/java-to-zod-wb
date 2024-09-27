@@ -18,7 +18,8 @@ public interface Attribute {
             MinAttribute.class,
             MaxAttribute.class,
             SizeAttribute.class,
-            OptionalAttribute.class);
+            OptionalNullableAttribute.class,
+            Optional.class);
 
     default int priority() {
         var priority = ATTRIBUTES_BY_PRIORITY.indexOf(getClass());

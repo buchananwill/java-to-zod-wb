@@ -58,13 +58,17 @@ public class TypeDescriptor {
                         if (m.getDeclaringClass().getSuperclass() == Object.class) {
                             return null;
                         }
-                        try {
-                            return m.getDeclaringClass()
-                                    .getSuperclass()
-                                    .getDeclaredMethod(m.getName(), m.getParameterTypes());
-                        } catch (NoSuchMethodException ignored) {
-                            return null;
-                        }
+                        return Optional.of(m)
+                                .map(Method::getDeclaringClass)
+                                .map(Class::getSuperclass)
+                                .map(clazz -> {
+                                    try {
+                                        return clazz.getDeclaredMethod(m.getName(), m.getParameterTypes());
+                                    } catch (NoSuchMethodException ignored) {
+                                        return null;
+                                    }
+                                })
+                                .orElse(null);
                     })
                     .filter(Objects::nonNull)
                     .collect(Collectors.toSet());
@@ -73,9 +77,22 @@ public class TypeDescriptor {
     }
 
     private Optional<Field> getField(Class<?> container, PropertyModel propertyModel) {
-        if (container == Object.class) {
+        if (container == null || container == Object.class) {
             return Optional.empty();
         }
+
+        // Check if the class is a record
+        if (container.isRecord()) {
+            try {
+                // Get the accessor method for the record component
+                return Optional.of(container.getDeclaredField(
+                        propertyModel.getOriginalMember().getName()));
+            } catch (NoSuchFieldException e) {
+                return Optional.empty();
+            }
+        }
+
+        // Handle ordinary classes.
         if (propertyModel.getOriginalMember() instanceof Field) {
             return Optional.of((Field) propertyModel.getOriginalMember());
         }

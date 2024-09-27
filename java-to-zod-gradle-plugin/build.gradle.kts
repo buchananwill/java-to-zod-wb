@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "sh.ivan"
-version = "0.6.1-SNAPSHOT"
+version = "0.8.8-SNAPSHOT"
 
 repositories {
     mavenLocal()
@@ -15,7 +15,7 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     implementation("jakarta.validation:jakarta.validation-api:3.1.0")
-    implementation("sh.ivan:java-to-zod-core:0.7.0-SNAPSHOT")
+    implementation("sh.ivan:java-to-zod-core:0.8.8-SNAPSHOT")
     // https://mvnrepository.com/artifact/org.apache.maven.plugin-tools/maven-plugin-annotations
     compileOnly("org.apache.maven.plugin-tools:maven-plugin-annotations:3.15.0")
 

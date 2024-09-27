@@ -6,7 +6,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
@@ -67,10 +70,12 @@ public class AttributeProcessor {
 
     public Set<Attribute> getAttributesForAnnotations(Type type, Set<Annotation> annotations) {
         HashSet<Attribute> attributes = new HashSet<>(processAnnotations(type, annotations));
-        if (isOptional(type, annotations)) {
-            attributes.add(new OptionalAttribute());
-        } else if (isNullable(type, annotations)) {
-            attributes.add(new NullableAttribute());
+        if (!settings.optionalAnnotations.isEmpty()) {
+            if (isOptional(type, annotations)) {
+                attributes.add(new Optional());
+            }
+        } else if (isOptionalNullable(type, annotations)) {
+            attributes.add(new OptionalNullableAttribute());
         }
         if (attributes.contains(new SizeAttribute(1, Integer.MAX_VALUE))
                 && attributes.stream()
@@ -84,17 +89,18 @@ public class AttributeProcessor {
     }
 
     private boolean isOptional(Type type, Set<Annotation> annotations) {
-        if (settings.optionalAnnotations.isEmpty()) {
-            return !(type instanceof Class<?> && ((Class<?>) type).isPrimitive())
-                    && annotations.stream()
-                            .map(Annotation::annotationType)
-                            .noneMatch(NOT_NULL_ANNOTATIONS_DEFAULT::contains);
-        } else return false; // TODO HANDLE THESE PATHWAYS WITH MORE NUANCE.
+
+        return !(type instanceof Class<?> && ((Class<?>) type).isPrimitive())
+                && annotations.stream()
+                        .map(Annotation::annotationType)
+                        .anyMatch(settings.optionalAnnotations::contains);
     }
 
-    private boolean isNullable(Type type, Set<Annotation> annotations) {
+    private boolean isOptionalNullable(Type type, Set<Annotation> annotations) {
         return !(type instanceof Class<?> && ((Class<?>) type).isPrimitive())
-                && annotations.stream().map(Annotation::annotationType).anyMatch(Nullable.class::equals);
+                && annotations.stream()
+                        .map(Annotation::annotationType)
+                        .noneMatch(NOT_NULL_ANNOTATIONS_DEFAULT::contains);
     }
 
     private Set<Attribute> processAnnotations(Type type, Set<Annotation> annotations) {
@@ -108,7 +114,7 @@ public class AttributeProcessor {
     private Attribute processAnnotation(Type type, Annotation annotation) {
         Attribute attribute = getAttribute(type, annotation);
         if (attribute != null) {
-            Optional<String> message = getMessage(annotation);
+            java.util.Optional<String> message = getMessage(annotation);
             if (message.isPresent()) {
                 return new AttributeWithMessage(attribute, message.get());
             }
@@ -137,14 +143,14 @@ public class AttributeProcessor {
         return null;
     }
 
-    private Optional<String> getMessage(Annotation annotation) {
+    private java.util.Optional<String> getMessage(Annotation annotation) {
         try {
             Method messageMethod = annotation.annotationType().getMethod("message");
             Object message = messageMethod.invoke(annotation);
             if (!Objects.equals(messageMethod.getDefaultValue(), message)) {
-                return Optional.of((String) message);
+                return java.util.Optional.of((String) message);
             }
-            return Optional.empty();
+            return java.util.Optional.empty();
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Could not get message from annotation", e);
         }

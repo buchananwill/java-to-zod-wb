@@ -5,9 +5,9 @@ import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class NullableAttribute implements Attribute {
+public class OptionalNullableAttribute implements Attribute {
     @Override
     public String zodMethod() {
-        return "nullable()";
+        return "optional().nullable()";
     }
 }

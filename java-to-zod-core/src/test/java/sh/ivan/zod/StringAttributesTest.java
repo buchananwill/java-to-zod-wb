@@ -17,7 +17,7 @@ import sh.ivan.zod.schema.Schema;
 import sh.ivan.zod.schema.StringSchema;
 import sh.ivan.zod.schema.attribute.EmailAttribute;
 import sh.ivan.zod.schema.attribute.NotBlankAttribute;
-import sh.ivan.zod.schema.attribute.OptionalAttribute;
+import sh.ivan.zod.schema.attribute.OptionalNullableAttribute;
 import sh.ivan.zod.schema.attribute.RegexAttribute;
 import sh.ivan.zod.schema.attribute.SizeAttribute;
 import sh.ivan.zod.schema.attribute.UuidAttribute;
@@ -67,7 +67,7 @@ class StringAttributesTest extends JavaToZodConverterTest {
     @Test
     void shouldSupportUUID() {
         assertThatField("id")
-                .isEqualTo(new StringSchema(Set.of(new OptionalAttribute(), new UuidAttribute())))
+                .isEqualTo(new StringSchema(Set.of(new OptionalNullableAttribute(), new UuidAttribute())))
                 .extracting(Schema::asZodSchema)
                 .isEqualTo("string().uuid().optional().nullable()");
     }
@@ -107,7 +107,7 @@ class StringAttributesTest extends JavaToZodConverterTest {
     @Test
     void shouldSupportEmail() {
         assertThatField("email")
-                .isEqualTo(new StringSchema(Set.of(new EmailAttribute(), new OptionalAttribute())))
+                .isEqualTo(new StringSchema(Set.of(new EmailAttribute(), new OptionalNullableAttribute())))
                 .extracting(Schema::asZodSchema)
                 .isEqualTo("string().email().optional().nullable()");
     }

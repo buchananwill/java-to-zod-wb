@@ -20,7 +20,7 @@ import sh.ivan.zod.schema.attribute.IntegerAttribute;
 import sh.ivan.zod.schema.attribute.MaxAttribute;
 import sh.ivan.zod.schema.attribute.MinAttribute;
 import sh.ivan.zod.schema.attribute.NegativeAttribute;
-import sh.ivan.zod.schema.attribute.OptionalAttribute;
+import sh.ivan.zod.schema.attribute.OptionalNullableAttribute;
 import sh.ivan.zod.schema.attribute.PositiveAttribute;
 
 class NumberAttributesTest extends JavaToZodConverterTest {
@@ -29,7 +29,7 @@ class NumberAttributesTest extends JavaToZodConverterTest {
     void shouldSupportMax() {
         assertThatField("maxed")
                 .isEqualTo(new NumberSchema(
-                        Set.of(new OptionalAttribute(), new IntegerAttribute(), new MaxAttribute(300L))))
+                        Set.of(new OptionalNullableAttribute(), new IntegerAttribute(), new MaxAttribute(300L))))
                 .extracting(Schema::asZodSchema)
                 .isEqualTo("number().int().max(300).optional().nullable()");
     }
@@ -46,7 +46,7 @@ class NumberAttributesTest extends JavaToZodConverterTest {
     void shouldSupportNegative() {
         assertThatField("negative")
                 .isEqualTo(new NumberSchema(
-                        Set.of(new OptionalAttribute(), new IntegerAttribute(), new NegativeAttribute(false))))
+                        Set.of(new OptionalNullableAttribute(), new IntegerAttribute(), new NegativeAttribute(false))))
                 .extracting(Schema::asZodSchema)
                 .isEqualTo("number().int().negative().optional().nullable()");
     }
@@ -55,7 +55,7 @@ class NumberAttributesTest extends JavaToZodConverterTest {
     void shouldSupportPositive() {
         assertThatField("positive")
                 .isEqualTo(new NumberSchema(
-                        Set.of(new OptionalAttribute(), new IntegerAttribute(), new PositiveAttribute(false))))
+                        Set.of(new OptionalNullableAttribute(), new IntegerAttribute(), new PositiveAttribute(false))))
                 .extracting(Schema::asZodSchema)
                 .isEqualTo("number().int().positive().optional().nullable()");
     }
@@ -63,7 +63,7 @@ class NumberAttributesTest extends JavaToZodConverterTest {
     @Test
     void shouldSupportNegativeOrZero() {
         assertThatField("negativeOrZero")
-                .isEqualTo(new NumberSchema(Set.of(new OptionalAttribute(), new NegativeAttribute(true))))
+                .isEqualTo(new NumberSchema(Set.of(new OptionalNullableAttribute(), new NegativeAttribute(true))))
                 .extracting(Schema::asZodSchema)
                 .isEqualTo("number().max(0).optional().nullable()");
     }
