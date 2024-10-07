@@ -109,8 +109,7 @@ public class AttributeProcessor {
     }
 
     private boolean isNullable(Type type, Set<Annotation> annotations) {
-        return !(type instanceof Class<?> && ((Class<?>) type).isPrimitive())
-                && annotations.stream().map(Annotation::annotationType).noneMatch(NOT_NULL_ANNOTATIONS::contains);
+        return false; // !(type instanceof Class<?> && ((Class<?>) type).isPrimitive()) && annotations.stream().map(Annotation::annotationType).noneMatch(NOT_NULL_ANNOTATIONS::contains);
     }
 
     private Set<Attribute> processAnnotations(Type type, Set<Annotation> annotations) {
