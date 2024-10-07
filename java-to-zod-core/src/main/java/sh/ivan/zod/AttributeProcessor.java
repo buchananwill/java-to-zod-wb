@@ -74,10 +74,10 @@ public class AttributeProcessor {
         }
         if (attributes.contains(new SizeAttribute(1, Integer.MAX_VALUE))
                 && attributes.stream()
-                .anyMatch(attribute -> attribute instanceof SizeAttribute
-                        && ((SizeAttribute) attribute).getMin() > 0
-                        && (((SizeAttribute) attribute).getMin() > 1
-                        || ((SizeAttribute) attribute).getMax() != Integer.MAX_VALUE))) {
+                        .anyMatch(attribute -> attribute instanceof SizeAttribute
+                                && ((SizeAttribute) attribute).getMin() > 0
+                                && (((SizeAttribute) attribute).getMin() > 1
+                                        || ((SizeAttribute) attribute).getMax() != Integer.MAX_VALUE))) {
             attributes.remove(new SizeAttribute(1, Integer.MAX_VALUE));
         }
         return Set.copyOf(attributes);
@@ -87,8 +87,8 @@ public class AttributeProcessor {
         if (settings.optionalAnnotations.isEmpty()) {
             return !(type instanceof Class<?> && ((Class<?>) type).isPrimitive())
                     && annotations.stream()
-                    .map(Annotation::annotationType)
-                    .noneMatch(NOT_NULL_ANNOTATIONS_DEFAULT::contains);
+                            .map(Annotation::annotationType)
+                            .noneMatch(NOT_NULL_ANNOTATIONS_DEFAULT::contains);
         } else return false; // TODO HANDLE THESE PATHWAYS WITH MORE NUANCE.
     }
 

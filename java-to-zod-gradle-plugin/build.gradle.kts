@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "sh.ivan"
-version = "0.7.0-SNAPSHOT"
+version = "0.6.1-SNAPSHOT"
 
 repositories {
     mavenLocal()
