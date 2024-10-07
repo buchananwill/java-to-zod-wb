@@ -11,14 +11,14 @@ import org.junit.jupiter.api.Test;
 import sh.ivan.zod.schema.DateSchema;
 import sh.ivan.zod.schema.ObjectSchema;
 import sh.ivan.zod.schema.Schema;
-import sh.ivan.zod.schema.attribute.OptionalNullableAttribute;
+import sh.ivan.zod.schema.attribute.OptionalAttribute;
 
 class DateTest extends JavaToZodConverterTest {
 
     @Test
     void shouldSupportBasicDateTypes() {
         assertThatField("instant")
-                .isEqualTo(new DateSchema(Set.of(new OptionalNullableAttribute())))
+                .isEqualTo(new DateSchema(Set.of(new OptionalAttribute())))
                 .extracting(Schema::asZodSchema)
                 .isEqualTo("date().optional().nullable()");
 

@@ -46,7 +46,7 @@ public class JavaToZodConvertorWrapper {
                 .schemaNameSuffix(pluginParameters.getSchemaNameSuffix())
                 .build();
         JavaToZodConverter javaToZodConverter =
-                new JavaToZodConverter(typeScriptGenerator.getModelParser(), configuration);
+                new JavaToZodConverter(typeScriptGenerator.getModelParser(), configuration, settings);
         Map<String, ObjectSchema> beanSchemas = javaToZodConverter.getBeanSchemas(model);
         SchemaFileWriter schemaFileWriter = new SchemaFileWriter(beanSchemas, getOutputFile.get());
         schemaFileWriter.write();

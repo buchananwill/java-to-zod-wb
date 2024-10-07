@@ -10,7 +10,7 @@ import sh.ivan.zod.schema.ReferenceSchema;
 import sh.ivan.zod.schema.Schema;
 import sh.ivan.zod.schema.StringSchema;
 import sh.ivan.zod.schema.attribute.IntegerAttribute;
-import sh.ivan.zod.schema.attribute.OptionalNullableAttribute;
+import sh.ivan.zod.schema.attribute.OptionalAttribute;
 import sh.ivan.zod.schema.attribute.SizeAttribute;
 
 public abstract class JavaObjectTest extends JavaToZodConverterTest {
@@ -22,7 +22,7 @@ public abstract class JavaObjectTest extends JavaToZodConverterTest {
                 .asInstanceOf(InstanceOfAssertFactories.map(String.class, Schema.class))
                 .hasSize(4)
                 .containsEntry("street", new StringSchema(Set.of()))
-                .containsEntry("streetTwo", new StringSchema(Set.of(new OptionalNullableAttribute())))
+                .containsEntry("streetTwo", new StringSchema(Set.of(new OptionalAttribute())))
                 .containsEntry("city", new StringSchema(Set.of()))
                 .containsEntry("country", new StringSchema(Set.of()));
         objectSchemaAssert
@@ -39,8 +39,8 @@ public abstract class JavaObjectTest extends JavaToZodConverterTest {
                 .asInstanceOf(InstanceOfAssertFactories.map(String.class, Schema.class))
                 .hasSize(3)
                 .containsEntry("name", new StringSchema(Set.of()))
-                .containsEntry("age", new NumberSchema(Set.of(new OptionalNullableAttribute(), new IntegerAttribute())))
-                .containsEntry("address", new ReferenceSchema("Address", Set.of(new OptionalNullableAttribute())));
+                .containsEntry("age", new NumberSchema(Set.of(new OptionalAttribute(), new IntegerAttribute())))
+                .containsEntry("address", new ReferenceSchema("Address", Set.of(new OptionalAttribute())));
         objectSchemaAssert
                 .extracting(ObjectSchema::asZodSchema)
                 .isEqualTo(

@@ -21,7 +21,7 @@ import sh.ivan.zod.schema.attribute.IntegerAttribute;
 import sh.ivan.zod.schema.attribute.MaxAttribute;
 import sh.ivan.zod.schema.attribute.MinAttribute;
 import sh.ivan.zod.schema.attribute.NegativeAttribute;
-import sh.ivan.zod.schema.attribute.OptionalNullableAttribute;
+import sh.ivan.zod.schema.attribute.OptionalAttribute;
 import sh.ivan.zod.schema.attribute.PositiveAttribute;
 
 class MessageTest extends JavaToZodConverterTest {
@@ -29,7 +29,7 @@ class MessageTest extends JavaToZodConverterTest {
     void shouldSupportMax() {
         assertThatField("maxed")
                 .isEqualTo(new NumberSchema(Set.of(
-                        new OptionalNullableAttribute(),
+                        new OptionalAttribute(),
                         new IntegerAttribute(),
                         new AttributeWithMessage(new MaxAttribute(300L), "must not be over '300'"))))
                 .extracting(Schema::asZodSchema)
@@ -50,7 +50,7 @@ class MessageTest extends JavaToZodConverterTest {
     void shouldSupportNegative() {
         assertThatField("negative")
                 .isEqualTo(new NumberSchema(Set.of(
-                        new OptionalNullableAttribute(),
+                        new OptionalAttribute(),
                         new IntegerAttribute(),
                         new AttributeWithMessage(new NegativeAttribute(false), "must be \\negative\\"))))
                 .extracting(Schema::asZodSchema)
@@ -61,7 +61,7 @@ class MessageTest extends JavaToZodConverterTest {
     void shouldSupportPositive() {
         assertThatField("positive")
                 .isEqualTo(new NumberSchema(Set.of(
-                        new OptionalNullableAttribute(),
+                        new OptionalAttribute(),
                         new IntegerAttribute(),
                         new AttributeWithMessage(new PositiveAttribute(false), "must be positive"))))
                 .extracting(Schema::asZodSchema)
@@ -72,7 +72,7 @@ class MessageTest extends JavaToZodConverterTest {
     void shouldSupportNegativeOrZero() {
         assertThatField("negativeOrZero")
                 .isEqualTo(new NumberSchema(Set.of(
-                        new OptionalNullableAttribute(),
+                        new OptionalAttribute(),
                         new AttributeWithMessage(new NegativeAttribute(true), "must be negative or zero"))))
                 .extracting(Schema::asZodSchema)
                 .isEqualTo("number().max(0, { message: 'must be negative or zero' }).optional().nullable()");
